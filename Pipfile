@@ -15,6 +15,7 @@ gunicorn = "*"
 django-heroku = "*"
 django-rest-api = "*"
 postgres = "*"
+whitenoise = "*"
 
 [dev-packages]
 
