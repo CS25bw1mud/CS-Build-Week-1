@@ -12,7 +12,6 @@ class Room(models.Model):
     s_to = models.IntegerField(default=0)
     e_to = models.IntegerField(default=0)
     w_to = models.IntegerField(default=0)
-    
     def connectRooms(self, destinationRoom, direction):
         destinationRoomID = destinationRoom.id
         try:
@@ -37,6 +36,7 @@ class Room(models.Model):
     def playerUUIDs(self, currentPlayerID):
         return [p.uuid for p in Player.objects.filter(currentRoom=self.id) if p.id != int(currentPlayerID)]
 
+
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     currentRoom = models.IntegerField(default=0)
@@ -52,10 +52,22 @@ class Player(models.Model):
             self.initialize()
             return self.room()
 
+@receiver(post_save, sender=User)
+def create_user_player(sender, instance, created, **kwargs):
+    if created:
+        Player.objects.create(user=instance)
+        Token.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_player(sender, instance, **kwargs):
+    instance.player.save()
+
+
+
 '''
 CREATE THE WORLD HERE
 
-'''
+
 class Track:
     def __init__(self, sprint, description):
         self.sprint = sprint
@@ -101,8 +113,7 @@ class Map:
                 new_sprint = Track(next_sprint, next_description)
                 current_spot.north = new_sprint
                 new_sprint.previous = current_spot
-                #return "Success!"
-                return new_sprint
+
     def insert_to_south(self, current_sprint, next_sprint, next_description):
         current_spot = self.search_map(current_sprint)
         if current_spot == -1:
@@ -114,7 +125,8 @@ class Map:
                 new_sprint = Track(next_sprint, next_description)
                 current_spot.south = new_sprint
                 new_sprint.previous = current_spot
-                return "Success!"
+                
+
     def insert_to_east(self, current_sprint, next_sprint, next_description):
         current_spot = self.search_map(current_sprint)
         if current_spot == -1:
@@ -126,7 +138,7 @@ class Map:
                 new_sprint = Track(next_sprint, next_description)
                 current_spot.east = new_sprint
                 new_sprint.previous = current_spot
-                return "Success!"
+
     def insert_to_west(self, current_sprint, next_sprint, next_description):
         current_spot = self.search_map(current_sprint)
         if current_spot == -1:
@@ -138,33 +150,16 @@ class Map:
                 new_sprint = Track(next_sprint, next_description)
                 current_spot.west = new_sprint
                 new_sprint.previous = current_spot
-                #return "Success!"
-
-
-
-
-@receiver(post_save, sender=User)
-def create_user_player(sender, instance, created, **kwargs):
-    if created:
-        Player.objects.create(user=instance)
-        Token.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_player(sender, instance, **kwargs):
-    instance.player.save()
-
-
-
-
+'''
 #web
 #data science
 
-location = Map()
-location.insert_to_north(current_sprint='Orientation', next_sprint='web', next_description='learning web stuff')
-location.insert_to_east('Orientation', 'ds', 'learning ds stuff')
-location.insert_to_west('Orientation', 'ios', 'learning apple stuff')
-location.insert_to_west('ios', 'C#', 'learning C#')
-location.insert_to_south('Orientation', 'ux', 'learning ux stuff')
+# location = Map()
+# location.insert_to_north(current_sprint='Orientation', next_sprint='web', next_description='learning web stuff')
+# location.insert_to_east(current_sprint='Orientation', next_sprint='ds', next_description='learning ds stuff')
+# location.insert_to_west('Orientation', 'ios', 'learning apple stuff')
+# location.insert_to_west('ios', 'C#', 'learning C#')
+# location.insert_to_south('Orientation', 'ux', 'learning ux stuff')
 #ios
 #ux
 

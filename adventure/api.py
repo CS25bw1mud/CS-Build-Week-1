@@ -65,3 +65,10 @@ def move(request):
 def say(request):
     # IMPLEMENT
     return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
+
+@csrf_exempt
+@api_view(["GET"])
+def map_endpoint(request):
+    tree = Room.objects.all()
+    return JsonResponse(tree, safe=False)
+    #return JsonResponse(tree)
