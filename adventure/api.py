@@ -71,8 +71,18 @@ def say(request):
 def map_endpoint(request):
     data = Room.objects.all()
     tracks = {}
+    # for item in data:
+    #     tracks[item.title] = item.description
     for item in data:
-        tracks[item.title] = item.description
+        tracks[item.title] = {
+            "id" : item.id,
+            "title" : item.title,
+            "description" : item.description,
+            "n_to" : item.n_to,
+            "s_to" : item.s_to,
+            "w_to" : item.w_to,
+            "e_to" : item.e_to
+        }
 
 
     # return JsonResponse(tracks)
