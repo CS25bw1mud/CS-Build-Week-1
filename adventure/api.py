@@ -71,9 +71,9 @@ def say(request):
 def map_endpoint(request):
     data = Room.objects.all()
     tracks = {}
-    # for item in data:
-    #     tracks[item.title] = item.description
     for item in data:
+        #  on front-end, will need to do Object.values(response....) to get the number and not title
+        # or can be item.id to return a string, ie, "13" and cast it to int on front end(casting don't work here for some reason)
         tracks[item.title] = {
             "id" : item.id,
             "title" : item.title,
@@ -83,8 +83,4 @@ def map_endpoint(request):
             "w_to" : item.w_to,
             "e_to" : item.e_to
         }
-
-
-    # return JsonResponse(tracks)
-    #return JsonResponse(Room.objects.all(), safe=False)
     return JsonResponse(tracks)
