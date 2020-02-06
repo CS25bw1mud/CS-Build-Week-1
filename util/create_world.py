@@ -275,24 +275,34 @@ thankful.save()
 
 orientation.connectRooms(web_1, "n")
 web_1.connectRooms(orientation, "s")
+
 web_1.connectRooms(web_2, "n")
 web_2.connectRooms(web_1, "s")
+
 web_2.connectRooms(web_3, "n")
 web_3.connectRooms(web_2, "s")
+
 web_3.connectRooms(web_4, "n")
 web_4.connectRooms(web_3, "s")
+
 web_4.connectRooms(web_5, "n")
 web_5.connectRooms(web_4, "s")
+
 web_5.connectRooms(web_6, "n")
 web_6.connectRooms(web_5, "s")
+
 web_6.connectRooms(web_7, "n")
 web_7.connectRooms(web_6, "s")
+
 web_7.connectRooms(web_8, "n")
 web_8.connectRooms(web_7, "s")
+
 web_8.connectRooms(web_9, "n")
 web_8.connectRooms(web_7, "s")
+
 web_9.connectRooms(web_10, "n")
 web_9.connectRooms(web_8, "s")
+
 web_10.connectRooms(web_9, "s")
 ##split off here
 web_10.connectRooms(web_10b_node, "w")

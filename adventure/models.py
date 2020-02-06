@@ -52,6 +52,8 @@ class Player(models.Model):
             self.initialize()
             return self.room()
 
+
+
 @receiver(post_save, sender=User)
 def create_user_player(sender, instance, created, **kwargs):
     if created:

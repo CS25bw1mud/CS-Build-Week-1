@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 # from pusher import Pusher
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from decouple import config
 from django.contrib.auth.models import User
 from .models import *
@@ -23,7 +23,7 @@ def initialize(request):
     return JsonResponse({'uuid': uuid, 'name':player.user.username, 'title':room.title, 'description':room.description, 'players':players}, safe=True)
 
 
-# @csrf_exempt
+@csrf_exempt
 @api_view(["POST"])
 def move(request):
     dirs={"n": "north", "s": "south", "e": "east", "w": "west"}
@@ -69,6 +69,12 @@ def say(request):
 @csrf_exempt
 @api_view(["GET"])
 def map_endpoint(request):
-    tree = Room.objects.all()
-    return JsonResponse(tree, safe=False)
-    #return JsonResponse(tree)
+    data = Room.objects.all()
+    tracks = {}
+    for item in data:
+        tracks[item.title] = item.description
+
+
+    # return JsonResponse(tracks)
+    #return JsonResponse(Room.objects.all(), safe=False)
+    return JsonResponse(tracks)
