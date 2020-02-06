@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 # from pusher import Pusher
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from decouple import config
 from django.contrib.auth.models import User
 from .models import *
@@ -23,7 +23,7 @@ def initialize(request):
     return JsonResponse({'uuid': uuid, 'name':player.user.username, 'title':room.title, 'description':room.description, 'players':players}, safe=True)
 
 
-# @csrf_exempt
+@csrf_exempt
 @api_view(["POST"])
 def move(request):
     dirs={"n": "north", "s": "south", "e": "east", "w": "west"}
@@ -65,3 +65,22 @@ def move(request):
 def say(request):
     # IMPLEMENT
     return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
+
+@csrf_exempt
+@api_view(["GET"])
+def map_endpoint(request):
+    data = Room.objects.all()
+    tracks = {}
+    for item in data:
+        #  on front-end, will need to do Object.values(response....) to get the number and not title
+        # or can be item.id to return a string, ie, "13" and cast it to int on front end(casting don't work here for some reason)
+        tracks[item.title] = {
+            "id" : item.id,
+            "title" : item.title,
+            "description" : item.description,
+            "n_to" : item.n_to,
+            "s_to" : item.s_to,
+            "w_to" : item.w_to,
+            "e_to" : item.e_to
+        }
+    return JsonResponse(tracks)
