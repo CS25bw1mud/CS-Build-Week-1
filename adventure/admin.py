@@ -19,4 +19,5 @@ class PlayerAdmin(admin.ModelAdmin):
 
 
 
-admin.site.register(Player, )
+admin.site.register(Player)
+admin.site.register(Room)
